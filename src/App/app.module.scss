@@ -1,8 +1,138 @@
+@import "../styles/abstracts/";
+
+@keyframes fade-scale {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .app {
+  animation: fade 500ms cubic-bezier(0.25, 1, 0.5, 1) 700ms 1 normal backwards;
   display: flex;
   flex-direction: column;
 
   @media (min-width: 768px) {
     flex-direction: row;
+  }
+}
+
+.loginScreen {
+  animation: fade-scale 500ms cubic-bezier(0.25, 1, 0.5, 1) 700ms 1 normal backwards;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 15vh 5vw;
+  width: 100%;
+
+  &.leave {
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: scale(0.8);
+    transition-property: opacity, transform;
+    transition: 400ms cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 100;
+  }
+}
+
+.title {
+  font-family: $alpina;
+  font-size: calc(3rem + 3.5vw);
+  font-style: italic;
+  font-weight: 300;
+  margin-bottom: 0.25rem;
+}
+
+.year {
+  font-family: $maxi;
+  font-weight: 300;
+  font-size: 2rem;
+  margin-bottom: 4rem;
+}
+
+.noThanks {
+  position: relative;
+}
+
+.skype {
+  position: absolute;
+  width: calc(100% - 0.125em);
+  left: -0.15em;
+  top: -0.175em;
+}
+
+.passwordForm {
+  position: relative;
+
+  &::before,
+  &::after {
+    border-bottom: 1px solid black;
+    content: '';
+    height: 0;
+    position: absolute;
+    bottom: -0.25rem;
+    transition: 150ms ease;
+  }
+
+  &::before {
+    left: 0;
+    opacity: 0;
+    right: 0;
+    transition-property: opacity;
+  }
+
+  &::after {
+    left: 50%;
+    right: 50%;
+    transition-property: left, right;
+  }
+
+  &:hover {
+    &::before {
+      opacity: 0.125;
+    }
+  }
+
+  &:focus-within {
+    &::after {
+      left: 0;
+      right: 0;
+    }
+  }
+}
+
+.passwordInput {
+  appearance: none;
+  background-color: transparent;
+  border: 0;
+  display: block;
+  font-family: $raster-roman-blended;
+  font-size: 1.25rem;
+  text-align: center;
+  width: 100%;
+
+  &:focus {
+    outline: none;
   }
 }

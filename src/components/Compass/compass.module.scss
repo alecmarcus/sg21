@@ -1,0 +1,28 @@
+@import "../../styles/abstracts/";
+
+.compass {
+  bottom: 1.25em;
+  display: inline-block;
+  font-size: 0.225em;
+  position: relative;
+  font-weight: 400;
+}
+
+.lat,
+.long {
+  font-size: 1em;
+  white-space: pre;
+  font-family: $maxi;
+}
+
+.lat {
+  display: inline-block;
+}
+
+.long {
+  display: inline-block;
+  transform: rotate(90deg);
+  position: absolute;
+  left: 0;
+  width: 100%;
+}

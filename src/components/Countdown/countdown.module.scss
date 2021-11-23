@@ -1,0 +1,23 @@
+@import "../../styles/abstracts/";
+
+.calLink {
+  text-decoration-thickness: 4%;
+}
+
+.countdown {
+  font-family: $maxi;
+  line-height: 0;
+
+  .time:hover & {
+    display: none;
+  }
+}
+
+.date {
+  display: none;
+  line-height: 0;
+
+  .time:hover & {
+    display: inline;
+  }
+}

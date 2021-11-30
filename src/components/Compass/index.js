@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { DESTINATION_COORDS } from "../../constants";
+import { useAnimation } from "../../hooks";
 import styles from "./compass.module.scss";
 
 const Compass = () => {
@@ -38,37 +39,16 @@ const Compass = () => {
 
   const easeOutElastic = (x) => {
     const c4 = (2 * Math.PI) / 3;
-
-    return x === 0
-      ? 0
-      : x === 1
-      ? 1
-      : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
+    return x === 0 ? 0 : x === 1 ? 1 : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
   }
 
   const compassRef = useRef(null);
-  const didAnimationStartRef = useRef(false);
-
-  const animateToHeading = useCallback(() => {
-    const duration = 360; // frames @ 60fps
-    let currentFrame = 0; // will update every interval with the current frame #
-
-    const animate = () => {
-      const easedHeading = easeOutElastic(currentFrame / duration) * heading;
-      compassRef.current.style.transform = `rotate(${easedHeading}deg)`;
-      currentFrame += 1;
-
-      // Continue the callback loop until complete.
-      if (currentFrame <= duration) {
-        window.requestAnimationFrame(animate);
-      }
-    };
-
-    // Start the callback loop.
-    if (currentFrame === 0) {
-      animate();
-    }
-  }, [heading]);
+  const [headingAnimation, headingAnimationState] = useAnimation({
+    node: compassRef,
+    to: { transform: `rotate(${heading}deg)` },
+    duration: 6000,
+    ease: easeOutElastic,
+  });
 
   useEffect(() => {
     if (visitorCoords) {
@@ -77,15 +57,13 @@ const Compass = () => {
   }, [visitorCoords, getHeading]);
 
   useEffect(() => {
-    if (heading !== 0 && compassRef.current && !didAnimationStartRef.current) {
-      didAnimationStartRef.current = true;
-      animateToHeading();
+    if (heading !== 0 && compassRef.current && headingAnimationState === 'NOT_STARTED') {
+      headingAnimation();
     }
-  }, [heading, animateToHeading]);
+  }, [heading, headingAnimation, headingAnimationState]);
 
-  const formattedCoord = (coord) => (
-    `${coord.slice(0, coord.indexOf(`'`) + 1)} ${coord.slice(coord.indexOf(`'`) + 2, coord.length + 1)}`
-  )
+  const formattedCoord = (coord) =>
+    `${coord.slice(0, coord.indexOf(`'`) + 1)} ${coord.slice(coord.indexOf(`'`) + 2, coord.length + 1)}`;
 
   return (
     <span className={styles.compass} ref={compassRef}>
